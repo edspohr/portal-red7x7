@@ -1,0 +1,17 @@
+# Dependencias
+node_modules/
+
+# Entornos
+.env
+.env.local
+.env.production
+backend/.env
+frontend/.env
+
+# Build / coverage
+frontend/dist/
+coverage/
+
+# Archivos temporales
+.DS_Store
+npm-debug.log*

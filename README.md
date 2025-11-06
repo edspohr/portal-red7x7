@@ -38,12 +38,33 @@ npm install
 
 ## Migraciones y datos de ejemplo
 
+### Opción rápida (recomendada)
+
+1. Crea el archivo `backend/.env` (puedes copiar `.env.example` y recortar las variables del frontend) y rellena `DATABASE_URL` con la cadena de conexión de tu base de datos PostgreSQL.
+2. Desde la carpeta `backend/` ejecuta:
+
+```bash
+cd backend
+npm run setup:db
+```
+
+El script aplicará las migraciones y sembrará los datos iniciales en un solo paso.
+
+### Opción manual
+
 ```bash
 cd backend
 npx prisma migrate dev --name init
 npm run prisma:seed
 ```
 
+En ambos casos se crea un usuario admin (`admin@red7x7.cl`) con contraseña `changeme123`, un usuario Pro y un miembro estándar.
+
+### Inicializar una base gestionada (Vercel, Neon, Supabase)
+
+1. En el panel del proveedor crea una instancia PostgreSQL y copia la cadena de conexión (por ejemplo, en Vercel: *Storage → Create Database → Postgres*).
+2. Guarda la URL en `backend/.env` o ejecútala directamente con `npm run setup:db -- --url "postgres://..."`.
+3. Una vez que la base existe, sube la misma URL a las variables de entorno de Vercel (`DATABASE_URL`) y despliega; la API usará el pool gestionado.
 Esto crea un usuario admin (`admin@red7x7.cl`) con contraseña `changeme123`, un usuario Pro y un miembro estándar.
 
 ## Ejecución en modo desarrollo
