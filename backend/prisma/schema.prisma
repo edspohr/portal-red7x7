@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  MEMBER
+  PRO
+  ADMIN
+}
+
+enum Membership {
+  SOCIO7X7
+  PRO
+}
+
+model User {
+  id               Int                @id @default(autoincrement())
+  email            String             @unique
+  passwordHash     String
+  name             String
+  company          String?
+  position         String?
+  phone            String?
+  role             Role               @default(MEMBER)
+  membership       Membership         @default(SOCIO7X7)
+  announcements    Announcement[]
+  meetingsCreated  Meeting[]          @relation("MeetingsCreated")
+  participants     MeetingParticipant[]
+  contactRequests  ContactRequest[]   @relation("Requester")
+  receivedRequests ContactRequest[]   @relation("Target")
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+}
+
+model Announcement {
+  id        Int      @id @default(autoincrement())
+  content   String
+  pinned    Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt DateTime @default(now())
+}
+
+model Meeting {
+  id           Int                   @id @default(autoincrement())
+  title        String
+  agenda       String?
+  summary      String?
+  scheduledAt  DateTime?
+  createdBy    User                  @relation("MeetingsCreated", fields: [createdById], references: [id])
+  createdById  Int
+  participants MeetingParticipant[]
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+}
+
+model MeetingParticipant {
+  id        Int      @id @default(autoincrement())
+  meeting   Meeting  @relation(fields: [meetingId], references: [id])
+  meetingId Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  status    String   @default("CONFIRMED")
+}
+
+model ContactRequest {
+  id         Int        @id @default(autoincrement())
+  requester  User       @relation("Requester", fields: [requesterId], references: [id])
+  requesterId Int
+  target     User       @relation("Target", fields: [targetId], references: [id])
+  targetId   Int
+  status     String     @default("PENDING")
+  createdAt  DateTime   @default(now())
+  resolvedAt DateTime?
+}
