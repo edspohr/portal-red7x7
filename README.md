@@ -65,6 +65,7 @@ En ambos casos se crea un usuario admin (`admin@red7x7.cl`) con contraseña `cha
 1. En el panel del proveedor crea una instancia PostgreSQL y copia la cadena de conexión (por ejemplo, en Vercel: *Storage → Create Database → Postgres*).
 2. Guarda la URL en `backend/.env` o ejecútala directamente con `npm run setup:db -- --url "postgres://..."`.
 3. Una vez que la base existe, sube la misma URL a las variables de entorno de Vercel (`DATABASE_URL`) y despliega; la API usará el pool gestionado.
+Esto crea un usuario admin (`admin@red7x7.cl`) con contraseña `changeme123`, un usuario Pro y un miembro estándar.
 
 ## Ejecución en modo desarrollo
 
